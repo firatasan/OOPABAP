@@ -1,5 +1,5 @@
 Example: Local class with Attributes and Methods, ME Keyword
-REPORT Z730OOPS2.
+REPORT ZFRTOOPS2.
 
 class lcl_emp DEFINITION.
  public SECTION.
