@@ -1,0 +1,44 @@
+Example: Local class with Attributes and Methods, ME Keyword
+REPORT Z730OOPS2.
+
+class lcl_emp DEFINITION.
+ public SECTION.
+     methods : set, "instance method
+               display.
+  PROTECTED SECTION.
+     data : empno type i,  "instance attr
+            ename(20) type c.
+endclass.
+
+class lcl_emp IMPLEMENTATION.
+  method display.
+    write :/ empno,ename. "(or)
+*    write :/ me->empno,me->ename.
+  endmethod.
+
+  method set.
+*    empno = 4. "(or)
+      me->empno = 4.
+*    ename = 'Ravi'. "(or)
+      me->ename = 'Ravi'.
+  endmethod.
+endclass.
+
+data ob1 type ref to lcl_emp.
+START-OF-SELECTION.
+create object ob1.
+
+*write :/ ob1->empno,ob1->ename. "syntax error
+
+*call method display. "syntax error
+call method ob1->display.
+ob1->display( ).
+
+call method ob1->set.
+call method ob1->display.
+
+uline.
+data ob2 type ref to lcl_emp.
+create object ob2.
+write :/ 'Values of object ob2...'.
+call method ob2->display.
