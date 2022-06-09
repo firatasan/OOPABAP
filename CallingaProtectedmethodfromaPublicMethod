@@ -1,0 +1,32 @@
+Example: Calling a Protected method from a Public Method
+REPORT ZFRTOOPS3.
+
+class lcl_emp DEFINITION.
+ public SECTION.
+     methods set.
+  PROTECTED SECTION.
+     data : empno type i,
+            ename(20) type c.
+     methods display.
+endclass.
+
+class lcl_emp IMPLEMENTATION.
+  method display.
+    write :/ empno,ename.
+  endmethod.
+
+  method set.
+    empno = 4.
+    ename = 'Ravi'.
+*    call method ob1->display. "syntax error
+*    call method display. "(or)
+     call method me->display.
+  endmethod.
+endclass.
+
+data ob1 type ref to lcl_emp.
+START-OF-SELECTION.
+create object ob1.
+
+*call method ob1->display. "syntax error
+call method ob1->set.
