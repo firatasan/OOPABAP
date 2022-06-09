@@ -1,0 +1,44 @@
+Example: Returning Parameters
+REPORT ZFRT0OOPS7.
+
+class lcl_customer DEFINITION.
+  PUBLIC SECTION.
+    methods getcustomer IMPORTING i_kunnr type kna1-kunnr
+                        RETURNING value(e_name1) type kna1-name1.
+endclass.
+
+class lcl_customer IMPLEMENTATION.
+  method getcustomer.
+    select single name1 from kna1
+            into e_name1
+          where kunnr = i_kunnr.
+  endmethod.
+endclass.
+
+START-OF-SELECTION.
+data ob type ref to lcl_customer.
+create object ob.
+
+PARAMETERS p_kunnr type kna1-kunnr.
+
+data v_name1 type kna1-name1.
+
+call method ob->getcustomer
+EXPORTING
+  i_kunnr = p_kunnr.
+
+write :/ 'Customer name :',v_name1.
+
+clear v_name1.
+call method ob->getcustomer
+EXPORTING
+  i_kunnr = p_kunnr
+RECEIVING
+  e_name1 = v_name1.
+
+write :/ 'Customer name :',v_name1.
+
+uline.
+clear v_name1.
+v_name1 = ob->getcustomer( EXPORTING i_kunnr = p_kunnr ).
+write :/ 'Customer name :',v_name1.
