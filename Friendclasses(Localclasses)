@@ -1,0 +1,51 @@
+Example: Friend classes (Local classes)
+REPORT ZFRTOOPS8.
+
+class lcl_pqr DEFINITION DEFERRED.
+
+class lcl_abc DEFINITION FRIENDS lcl_pqr.
+  public SECTION.
+    methods m1.
+  PROTECTED SECTION.
+    methods m2.
+  PRIVATE SECTION.
+    methods m3.
+endclass.
+
+class lcl_abc IMPLEMENTATION.
+
+  method m1.
+    write :/ 'Inside public method m1 of lcl_abc...'.
+  endmethod.
+
+  method m2.
+    write :/ 'Inside protected method m2 of lcl_abc...'.
+  endmethod.
+
+  method m3.
+    write :/ 'Inside private method m3 of lcl_abc...'.
+  endmethod.
+
+endclass.
+
+class lcl_pqr DEFINITION.
+  public SECTION.
+    methods m4.
+endclass.
+
+class lcl_pqr IMPLEMENTATION.
+  method m4.
+    write :/ 'inside public method m4 of lcl_pqr...'.
+    data k type ref to lcl_abc.
+    create object k.
+    call method k->m1.
+    call method k->m2.
+    call method k->m3.
+  endmethod.
+endclass.
+
+START-OF-SELECTION.
+data ob type ref to lcl_pqr.
+create object ob.
+
+call method ob->m4.
