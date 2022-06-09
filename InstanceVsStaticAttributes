@@ -1,0 +1,37 @@
+Example: Instance Vs Static Attributes
+REPORT ZFRTOOPS1.
+
+class lcl_abc DEFINITION.
+ public SECTION.
+  data x type i. "instance attr
+  class-data y type i. "static attr
+endclass.
+
+*x = 10. "syntax error
+*y = 20. "syntax error
+*lcl_abc->x = 10. "syntax error
+*lcl_abc->y = 20. "syntax error
+write :/ 'Static attr y is ',lcl_abc=>y.
+
+lcl_abc=>y = 20.
+
+write :/ 'Static attr y is ',lcl_abc=>y.
+
+format color 3.
+write :/ 'First Object ob1...'.
+
+data ob1 type ref to lcl_abc. "reference / alias for class
+create object ob1.
+write :/ ob1->x,ob1->y.
+
+ob1->x = 15.
+ob1->y = 25.
+write :/ ob1->x,ob1->y,lcl_abc=>y.
+
+uline.
+format color 7.
+write :/ 'Second Object ob2...'.
+
+data ob2 type ref to lcl_abc. "reference / alias for class
+create object ob2.
+write :/ ob2->x,ob2->y.
