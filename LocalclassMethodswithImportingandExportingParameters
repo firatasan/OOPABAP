@@ -1,0 +1,73 @@
+Example: Local class Methods with Importing and Exporting Parameters
+REPORT Z730OOPS5.
+
+class lcl_customer DEFINITION.
+  PUBLIC SECTION.
+    methods getcustomer IMPORTING i_kunnr type kna1-kunnr
+                        exporting e_name1 type kna1-name1
+                                  e_ort01 type kna1-ort01.
+endclass.
+
+class lcl_customer IMPLEMENTATION.
+  method getcustomer.
+    select single name1 ort01
+                 from kna1
+            into (e_name1,e_ort01)
+             where kunnr = i_kunnr.
+  endmethod.
+endclass.
+
+START-OF-SELECTION.
+data ob type ref to lcl_customer.
+create object ob.
+
+PARAMETERS p_kunnr type kna1-kunnr.
+
+data : v_name1 type kna1-name1,
+       v_ort01 type kna1-ort01.
+
+call method ob->getcustomer
+EXPORTING
+  i_kunnr = p_kunnr.
+
+format color 3.
+write :/ 'Customer name :',v_name1,
+       / 'Customer city :',v_ort01.
+format color off.
+
+uline.
+call method ob->getcustomer
+EXPORTING
+  i_kunnr = p_kunnr
+IMPORTING
+  e_name1 = v_name1.
+
+format color 7.
+write :/ 'Customer name :',v_name1,
+       / 'Customer city :',v_ort01.
+format color off.
+
+uline.
+call method ob->getcustomer
+EXPORTING
+  i_kunnr = p_kunnr
+IMPORTING
+  e_name1 = v_name1
+  e_ort01 = v_ort01.
+
+format color 1.
+write :/ 'Customer name :',v_name1,
+       / 'Customer city :',v_ort01.
+format color off.
+
+uline.
+clear : v_name1,
+        v_ort01.
+ob->getcustomer( EXPORTING i_kunnr = '0000001001'
+                  IMPORTING e_name1 = v_name1
+                            e_ort01 = v_ort01 ).
+
+format color 1.
+write :/ 'Customer name :',v_name1,
+       / 'Customer city :',v_ort01.
+format color off.
